@@ -2,6 +2,9 @@ import com.rabbitmq.client.*;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * receives messages from queues from the exchange
+ */
 public class Receiver {
 
   private static final String EXCHANGE_NAME = "messages";
@@ -15,6 +18,10 @@ public class Receiver {
     channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.DIRECT);
     String queueName = channel.queueDeclare().getQueue();
 
+    /*
+     if there is no argv then queue binds with routing key == default
+     else queue binds with routing keys provided by argv
+     */
     if (argv.length < 1) {
       channel.queueBind(queueName, EXCHANGE_NAME, "default");
     } else {
